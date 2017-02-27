@@ -37,7 +37,7 @@ public class LocationsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final int numberOfColumns = 2;
+        final int numberOfColumns = getResources().getInteger(R.integer.columns);
         GridLayoutManager layoutManager = new GridLayoutManager(this, numberOfColumns);
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
