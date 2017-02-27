@@ -26,8 +26,10 @@ public class LocationsActivity extends AppCompatActivity {
 
     // Arbitrary request code number
     private static final int PERMISSION_REQUEST_CODE = 10;
+    private static final String LOCATION_KEY = "LOCATION_KEY";
 
     private WeatherAdapter adapter;
+    private Location currentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,15 @@ public class LocationsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
-        checkLocationPermissions();
+        if (savedInstanceState != null) {
+            currentLocation = savedInstanceState.getParcelable(LOCATION_KEY);
+        }
+
+        if (currentLocation != null) {
+            fetchWeather(currentLocation);
+        } else {
+            checkLocationPermissions();
+        }
     }
 
     @Override
@@ -67,6 +77,13 @@ public class LocationsActivity extends AppCompatActivity {
         if (requestCode == PERMISSION_REQUEST_CODE) {
             checkLocationPermissions();
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putParcelable(LOCATION_KEY, currentLocation);
     }
 
     private void checkLocationPermissions() {
@@ -95,6 +112,7 @@ public class LocationsActivity extends AppCompatActivity {
 
             @Override
             public void withLocation(Location location) {
+                currentLocation = location;
                 fetchWeather(location);
             }
         });
